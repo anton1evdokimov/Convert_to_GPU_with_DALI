@@ -1,7 +1,7 @@
 from typing import Tuple
-
+import cupy as cp
 import numpy as np
-import cv2
+import cvcuda
 
 class ImgPipeline:
     
@@ -14,8 +14,10 @@ class ImgPipeline:
         self._resize_()
         self._pad_()
         self._bgr_hwc2rgb_chw_()
-        self.img = self.img.astype(np.float32) / 255.
         self.img = self.img[None, ...]
+        # self.img = self.img.astype(np.float32) / 255.
+        self.img = cvcuda.convertto(self.img, np.float32, scale=1/255.)
+        
         return self.img
     
     def _put_img(self, img: np.ndarray) -> None:
@@ -26,9 +28,9 @@ class ImgPipeline:
     
     def _define_scaling_parameters(self)-> None:
         # resize down
-        self.scale = np.max([self.h0 / self.img_size, self.w0 / self.img_size])
+        self.scale = cp.max(cp.array([self.h0 / self.img_size, self.w0 / self.img_size]))
         if self.scale > 1:
-            self.h, self.w = int(np.round(self.h0 / self.scale)), int(np.round(self.w0 / self.scale))
+            self.h, self.w = (np.round(self.h0 / self.scale)), int(np.round(self.w0 / self.scale))
         else:
             self.h, self.w = self.h0, self.w0
         
@@ -45,7 +47,7 @@ class ImgPipeline:
     
     def _resize_(self)-> None:
         if self.scale > 1:
-            self.img = cv2.resize(self.img, (self.w, self.h), interpolation=cv2.INTER_LINEAR)
+            self.img = cvcuda.resize(self.img, (self.w, self.h), interpolation=cvcuda.Interp.AREA)
         return None
     
     def _bgr_hwc2rgb_chw_(self) -> None:
