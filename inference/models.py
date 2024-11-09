@@ -1,7 +1,6 @@
+import cupy as cp
 from time import perf_counter
 from typing import List, Dict, Tuple
-
-import numpy as np
 
 from dataloader.preprocessing import ImgPipeline
 from analytics.bbox import Bbox
@@ -21,7 +20,7 @@ class ModelDetect:
         self.t_inf = 0
         return None
     
-    def __call__(self, img: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def __call__(self, img: cp.ndarray) -> Tuple[cp.ndarray, cp.ndarray, cp.ndarray]:
         t0 = perf_counter()
         img = self.pipeline.process(img)
         t1 = perf_counter()
