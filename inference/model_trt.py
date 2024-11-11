@@ -1,5 +1,6 @@
 
 import time
+import cupy as cp
 from pathlib import Path
 from typing import List, List, Optional, Tuple, Union
 
@@ -35,7 +36,7 @@ class ModelTRT:
         self.t_inf = 0
         self.unwanted_classes = None
         if desired_classes is not None and len(desired_classes)*2 > num_total_classes:
-            self.unwanted_classes = np.array([x for x in range(num_total_classes) if x not in desired_classes])
+            self.unwanted_classes = cp.array([x for x in range(num_total_classes) if x not in desired_classes])
 
 
         logger = trt.Logger(trt.Logger.WARNING)
@@ -80,7 +81,7 @@ class ModelTRT:
     def get_duration_inference(self) -> float:
         return self.t_inf
     
-    def __call__(self, img: np.ndarray) -> Tuple[List[np.ndarray], List[np.ndarray], List[np.ndarray]]:
+    def __call__(self, img: cp.ndarray) -> Tuple[List[cp.ndarray], List[cp.ndarray], List[cp.ndarray]]:
         """
         Returns the Tuple of Lists (final_boxes, final_scores, final_cls_inds)
         final_boxes - final bboxes for objects, shape ~ (num_dets, 4) (xyxy);
@@ -98,8 +99,8 @@ class ModelTRT:
         self.t_inf = time.perf_counter() - t0
         return res
     
-    def _infer(self, img: np.ndarray) -> List[np.ndarray]:
-        np.copyto(self.inputs[0]['host'], img.ravel())
+    def _infer(self, img: cp.ndarray) -> List[cp.ndarray]:
+        cp.copyto(self.inputs[0]['host'], img.ravel())
         # Transfer input data from CPU to GPU.
         for input_ in self.inputs:
             # Copy from the Python buffer src to the device pointer dest (an int or a DeviceAllocation)
@@ -113,7 +114,7 @@ class ModelTRT:
         self.stream.synchronize()
         return [output['host'] for output in self.outputs]
     
-    def _postprocess(self, preds: List[np.ndarray]) -> Tuple[List[np.ndarray], List[np.ndarray], List[np.ndarray]]:
+    def _postprocess(self, preds: List[cp.ndarray]) -> Tuple[List[cp.ndarray], List[cp.ndarray], List[cp.ndarray]]:
         """
         preds is a list because the model might have a number of different outputs (not only 1) 
         Now we assume that there is only 1 output of the model (tested for batch_size=1)
@@ -137,7 +138,7 @@ class ModelTRT:
             final_cls_inds.append(cls_ind[mask])
         return final_boxes, final_scores, final_cls_inds
     
-    def _postprocess_nms(self, preds: List[np.ndarray]) -> Tuple[List[np.ndarray], List[np.ndarray], List[np.ndarray]]:
+    def _postprocess_nms(self, preds: List[cp.ndarray]) -> Tuple[List[cp.ndarray], List[cp.ndarray], List[cp.ndarray]]:
         """
         -//-
         (Without --include-nms or --end2end)
@@ -158,13 +159,13 @@ class ModelTRT:
             final_cls_inds.append(cls_inds)
         return final_boxes, final_scores, final_cls_inds
 
-    def _filter_by_classes(self, cls_inds: np.ndarray) -> np.ndarray:
+    def _filter_by_classes(self, cls_inds: cp.ndarray) -> cp.ndarray:
         if self.desired_classes is None:
-            return np.ones(cls_inds.size, dtype=bool)
+            return cp.ones(cls_inds.size, dtype=bool)
         if self.unwanted_classes is not None:
             mask = ~((cls_inds.reshape(-1, 1)  == self.unwanted_classes).any(axis=1))
             return mask
-        mask = (cls_inds.reshape(-1, 1) == np.array(self.desired_classes)).any(axis=1)
+        mask = (cls_inds.reshape(-1, 1) == cp.array(self.desired_classes)).any(axis=1)
         return mask
 
     
@@ -174,7 +175,7 @@ class ModelTRT:
         return None
     
     @staticmethod
-    def nms(boxes: np.ndarray, scores: np.ndarray, iou_thres: float) -> np.ndarray:
+    def nms(boxes: cp.ndarray, scores: cp.ndarray, iou_thres: float) -> cp.ndarray:
         """Apply the Non-Maximum Suppression (NMS) algorithm on the bounding boxes with their
         confidence scores and return an array with the indexes of the bounding boxes we want to
         keep (and display later).
@@ -200,26 +201,26 @@ class ModelTRT:
             keep.append(i)
             
             # calculate iou between current bbox and all other candidates
-            xx1 = np.maximum(x1[i], x1[order[1:]])
-            yy1 = np.maximum(y1[i], y1[order[1:]])
-            xx2 = np.minimum(x2[i], x2[order[1:]])
-            yy2 = np.minimum(y2[i], y2[order[1:]])
+            xx1 = cp.maximum(x1[i], x1[order[1:]])
+            yy1 = cp.maximum(y1[i], y1[order[1:]])
+            xx2 = cp.minimum(x2[i], x2[order[1:]])
+            yy2 = cp.minimum(y2[i], y2[order[1:]])
             
-            w = np.maximum(0, xx2 - xx1)
-            h = np.maximum(0, yy2 - yy1)
+            w = cp.maximum(0, xx2 - xx1)
+            h = cp.maximum(0, yy2 - yy1)
             intersection = w * h
             union = areas[i] + areas[order[1:]] - intersection
-            iou = np.divide(intersection, union, where=union!=0)
+            iou = cp.divide(intersection, union, where=union!=0)
             # we keep only those elements whose overlap
             # with the current bounding box is lower than the threshold:
-            indexes = np.where(iou <= iou_thres)[0]
+            indexes = cp.where(iou <= iou_thres)[0]
             # +1 because we had a shift (their indexes start from 0 but they should from 1)
             # when calculating xx1, yy1, ...
             order = order[indexes + 1] 
-        return np.array(keep)
+        return cp.array(keep)
     
     @staticmethod
-    def multiclass_nms(boxes: np.ndarray, scores: np.ndarray, desired_classes: List[int], iou_thres: float, score_thres: float) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def multiclass_nms(boxes: cp.ndarray, scores: cp.ndarray, desired_classes: List[int], iou_thres: float, score_thres: float) -> Tuple[cp.ndarray, cp.ndarray, cp.ndarray]:
         """
         Keyword arguments:
         boxes -- a NumPy array containing N bounding-box coordinates,
@@ -229,7 +230,7 @@ class ModelTRT:
         boxes.shape ~ (num_dets, 4);
         scores.shape ~ (num_dets, num_classes)
         """
-        final_boxes, final_scores, final_classes = [np.empty((0, 4), dtype=np.float32)], [np.empty(0, dtype=np.float32)], [np.empty(0, dtype=np.int32)]
+        final_boxes, final_scores, final_classes = [cp.empty((0, 4), dtype=cp.float32)], [cp.empty(0, dtype=cp.float32)], [cp.empty(0, dtype=cp.int32)]
         for cls_ in desired_classes:
             cls_scores = scores[:, cls_]
             mask_thres = cls_scores >= score_thres
@@ -241,13 +242,13 @@ class ModelTRT:
             keep = ModelTRT.nms(boxes_valid, scores_valid, iou_thres)
             final_boxes.append(boxes_valid[keep])
             final_scores.append(scores_valid[keep])
-            final_classes.append(np.ones(len(keep), dtype=np.int32) * cls_)
-        return np.concatenate(final_boxes), np.concatenate(final_scores), np.concatenate(final_classes)
+            final_classes.append(cp.ones(len(keep), dtype=cp.int32) * cls_)
+        return cp.concatenate(final_boxes), cp.concatenate(final_scores), cp.concatenate(final_classes)
     
     @staticmethod
-    def xywh2xyxy(boxes_wh: np.ndarray) -> np.ndarray:
+    def xywh2xyxy(boxes_wh: cp.ndarray) -> cp.ndarray:
         # Convert nx4 boxes from [x, y, w, h] to [x1, y1, x2, y2] where xy1=top-left, xy2=bottom-right
-        boxes_xyxy = np.empty(boxes_wh.shape, dtype=boxes_wh.dtype)
+        boxes_xyxy = cp.empty(boxes_wh.shape, dtype=boxes_wh.dtype)
         boxes_xyxy[..., 0] = boxes_wh[..., 0] - boxes_wh[..., 2] / 2 # top left x 
         boxes_xyxy[..., 1] = boxes_wh[..., 1] - boxes_wh[..., 3] / 2 # top left y
         boxes_xyxy[..., 2] = boxes_wh[..., 0] + boxes_wh[..., 2] / 2 # bottom right x
@@ -255,11 +256,11 @@ class ModelTRT:
         return boxes_xyxy
     
     # @staticmethod
-    # def xywh2xyxy(boxes_wh: np.ndarray) -> np.ndarray:
+    # def xywh2xyxy(boxes_wh: cp.ndarray) -> cp.ndarray:
     #     """
     #     this approach turns out to be slower for the numpy implementation 
     #     """
-    #     xywh2xyxy_matrix = np.array([
+    #     xywh2xyxy_matrix = cp.array([
     #         [1, 0 , 1, 0],
     #         [0, 1 , 0, 1],
     #         [-0.5, 0, 0.5, 0],

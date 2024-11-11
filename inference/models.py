@@ -28,9 +28,9 @@ class ModelDetect:
         
         t0 = perf_counter()
         output = self.model(img) 
-        if isinstance(output, np.ndarray):
+        if isinstance(output, cp.ndarray):
             output = (output[:, 1:5], output[:, 6], output[:, 5]) # (bboxes, scores, cls_inds)
-        else: # for tensorrt models (List[np.ndarray], List[np.ndarray], List[np.ndarray])
+        else: # for tensorrt models (List[cp.ndarray], List[cp.ndarray], List[cp.ndarray])
             output = tuple(x[0] for x in output)
         self.pipeline.coords_unscale(output[0])
         t1 = perf_counter()
@@ -44,7 +44,7 @@ class ModelDetect:
         return self.t_inf
     
     @staticmethod
-    def preds2bboxes(boxes: np.ndarray, scores: np.ndarray, cls_inds: np.ndarray, cfg: CFGModel) -> List[Bbox]:
+    def preds2bboxes(boxes: cp.ndarray, scores: cp.ndarray, cls_inds: cp.ndarray, cfg: CFGModel) -> List[Bbox]:
         results = []
         for xyxy, conf, cls_ in zip(boxes, scores, cls_inds):
             if cls_ not in cfg.CLS_THRES or conf < cfg.CLS_THRES[cls_]:
@@ -65,8 +65,8 @@ class ModelTracking:
         self.t_inf = 0
         return None
     
-    def _preds_track(self, bboxes: np.ndarray, scores: np.ndarray, cls_inds: np.ndarray) -> Dict[int, np.ndarray]:
-        objects_trackable = {cls_ind: np.empty((0,5), dtype=np.float32) for cls_ind in self.trackers}
+    def _preds_track(self, bboxes: cp.ndarray, scores: cp.ndarray, cls_inds: cp.ndarray) -> Dict[int, cp.ndarray]:
+        objects_trackable = {cls_ind: cp.empty((0,5), dtype=cp.float32) for cls_ind in self.trackers}
         if len(bboxes):  # returns the size of the first dimension
             for xyxy, conf, cls_ in zip(bboxes, scores, cls_inds):
                 if cls_ not in self.trackers or conf < self.cfg.CLS_THRES[cls_]:
@@ -79,7 +79,7 @@ class ModelTracking:
                     objects_trackable[cls_] = [[*xyxy, conf.item()]]
             for cls_ind, bbox in objects_trackable.items():
                 if isinstance(bbox, list):
-                    objects_trackable[cls_ind] = np.array(bbox, dtype=np.float32)
+                    objects_trackable[cls_ind] = cp.array(bbox, dtype=cp.float32)
     
         objects_tracked = {}
         for cls_ind, tracker in self.trackers.items():
@@ -87,7 +87,7 @@ class ModelTracking:
             # each line in tracks has x_left_upper, y_left_upper, x_right_bottom, y_right_bottom, id_of_object_from_SORT
         return objects_tracked
     
-    def _tracked_tensor2bboxes(self, tracked_bboxes: Dict[int, np.ndarray]) -> List[Bbox]:
+    def _tracked_tensor2bboxes(self, tracked_bboxes: Dict[int, cp.ndarray]) -> List[Bbox]:
         bboxes = []
         if not tracked_bboxes:
             return bboxes
@@ -104,7 +104,7 @@ class ModelTracking:
     def get_duration_inference(self):
         return self.t_inf
     
-    def __call__(self, img: np.ndarray) -> List[Bbox]:
+    def __call__(self, img: cp.ndarray) -> List[Bbox]:
         t0 = perf_counter()
         preds = self.model_detect(img)
         objects_tracked = self._preds_track(*preds)
