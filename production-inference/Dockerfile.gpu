@@ -1,0 +1,59 @@
+FROM nvcr.io/nvidia/tensorrt:23.10-py3 AS builder
+
+# # RUN apt update && \
+# #     apt clean && rm -rf /var/lib/apt/lists/*
+
+RUN python -m pip install --upgrade pip && \ 
+    python -m pip install --no-cache-dir cython
+
+WORKDIR /workspace
+
+# Export files
+COPY src/inference/wghts_ncrptn.py /workspace/
+
+
+COPY export/setup.py /workspace/
+
+# Weights Encoding
+ARG WEIGHTS_NAME
+
+COPY weights/${WEIGHTS_NAME} /workspace/weights/ 
+
+RUN python wghts_ncrptn.py --weights /workspace/weights/ --dirname2save weights_encoded
+
+# Cythonizaton of a source code
+COPY src /workspace/src
+
+RUN python setup.py build_ext --inplace
+
+RUN rm -rf /workspace/build/src && \
+    rm -rf /workspace/build/temp*
+#=========================main-stage==============================
+
+# https://docs.nvidia.com/deeplearning/tensorrt/container-release-notes/index.html#rel-23-10
+FROM nvcr.io/nvidia/tensorrt:23.10-py3 
+
+COPY requirements-gpu.txt /requirements-gpu.txt
+# COPY yolo7_10.30_conf_0.01.onnx /workspace/src/yolo7_10.30_conf_0.01.onnx
+
+RUN python -m pip install --upgrade pip && \ 
+    # python -m pip install -r /requirements-gpu.txt
+    python -m pip install --no-cache-dir -r /requirements-gpu.txt
+
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+
+WORKDIR /workspace
+
+COPY src/entrypoint.py /workspace/src/
+COPY src/test_nvimage_codec.py /workspace/src/
+# COPY weights_yolo/${U_WEIGHTS_NAME} /workspace/src/ 
+
+COPY cvcuda/cvcuda_cu12-0.7.0b0-cp310-cp310-linux_x86_64.whl /workspace/cvcuda/
+
+COPY src/source /workspace/source
+
+COPY --from=builder /workspace/weights_encoded/ /workspace/weights/ 
+
+COPY --from=builder /workspace/build /workspace/src
+
+ENTRYPOINT ["python", "src/entrypoint.py"]

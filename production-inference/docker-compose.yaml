@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  model:
+    container_name: stul-expansion-test
+    # image: rgy.tik.r314.ru/nn-models/remote-regions/stul-expansion:${DEVICE}_cython_abandoned-item_02_08_2024
+    # image: rgy.tik.r314.ru/nn-models/remote-regions/stul-expansion:${DEVICE}_cython_abandoned-item_25_10_2024_tesla-t4
+    # image: rgy.tik.r314.ru/nn-models/remote-regions/stul-expansion:${DEVICE}_cython_people-detection_28_10_2024_tesla-t4
+    image: rgy.tik.r314.ru/nn-models/remote-regions/stul-expansion:${DEVICE}_cython_people-detection_28_10_2024_rtx3070
+    build:
+      context: .
+      args:
+        # - WEIGHTS_NAME=abandoned-item-all-yolov7-w6-24_07_2024_exp_17_last.onnx             # yolov7-w6-end2end-1280-rtx3080.trt
+        # - WEIGHTS_NAME=abandoned-item-all-yolov7-w6-24_07_2024_exp_17_last_tesla_t4.trt     #
+        # - WEIGHTS_NAME=people-detection-yolov7-end2end-640-tesla-t4.trt
+        - WEIGHTS_NAME=yolov7_18.11.2024.trt
+        - U_WEIGHTS_NAME=best_yolo_11.pt
+      dockerfile: Dockerfile.${DEVICE}
+    
+    env_file:
+      - "./src/.env"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # entrypoint:
+    #   ["/bin/bash"]
+    volumes:
+      - "${PWD}:/workspace_host"
+      - "./workspace3:/workspace/weights"
+      - "./docker_output:/infered"
+      - "/tmp/container_logs:/tmp/container_logs"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

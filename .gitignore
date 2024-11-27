@@ -1,0 +1,12 @@
+**/__pycache__
+test
+.idea
+**/build
+*.c
+*.so
+tools*
+*.trt
+*.pt
+*.jpg
+*.onnx
+*/cvcuda/*

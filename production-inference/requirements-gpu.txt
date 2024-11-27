@@ -1,0 +1,12 @@
+
+opencv-python-headless==4.7.0.72
+kafka-python==2.0.2
+ultralytics
+cupy-cuda11x
+nvidia-nvimgcodec-cu12
+filterpy==1.4.5
+#metrics
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+opentelemetry-exporter-otlp-proto-grpc==1.21.0
+nvtx==0.2.8

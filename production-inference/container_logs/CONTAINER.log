@@ -1,0 +1,44 @@
+2024-11-13 11:49:51,469|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 11:49:51,469|INFO|environment.py|  CFGTracking()
+2024-11-13 11:49:51,469|INFO|environment.py|  None
+2024-11-13 11:49:51,469|INFO|environment.py|  None
+2024-11-13 11:49:57,600|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 11:49:57,600|INFO|environment.py|  CFGTracking()
+2024-11-13 11:49:57,600|INFO|environment.py|  None
+2024-11-13 11:49:57,600|INFO|environment.py|  None
+2024-11-13 12:02:50,242|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:02:50,242|INFO|environment.py|  CFGTracking()
+2024-11-13 12:02:50,242|INFO|environment.py|  None
+2024-11-13 12:02:50,242|INFO|environment.py|  None
+2024-11-13 12:04:24,663|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:04:24,663|INFO|environment.py|  CFGTracking()
+2024-11-13 12:04:24,663|INFO|environment.py|  None
+2024-11-13 12:04:24,663|INFO|environment.py|  None
+2024-11-13 12:06:20,457|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:06:20,457|INFO|environment.py|  CFGTracking()
+2024-11-13 12:06:20,457|INFO|environment.py|  None
+2024-11-13 12:06:20,457|INFO|environment.py|  None
+2024-11-13 12:07:56,970|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:07:56,970|INFO|environment.py|  CFGTracking()
+2024-11-13 12:07:56,970|INFO|environment.py|  None
+2024-11-13 12:07:56,970|INFO|environment.py|  None
+2024-11-13 12:08:22,930|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:08:22,930|INFO|environment.py|  CFGTracking()
+2024-11-13 12:08:22,930|INFO|environment.py|  None
+2024-11-13 12:08:22,930|INFO|environment.py|  None
+2024-11-13 12:09:30,393|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:09:30,393|INFO|environment.py|  CFGTracking()
+2024-11-13 12:09:30,393|INFO|environment.py|  None
+2024-11-13 12:09:30,394|INFO|environment.py|  None
+2024-11-13 12:09:43,638|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:09:43,639|INFO|environment.py|  CFGTracking()
+2024-11-13 12:09:43,639|INFO|environment.py|  None
+2024-11-13 12:09:43,639|INFO|environment.py|  None
+2024-11-13 12:09:53,990|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:09:53,990|INFO|environment.py|  CFGTracking()
+2024-11-13 12:09:53,990|INFO|environment.py|  None
+2024-11-13 12:09:53,990|INFO|environment.py|  None
+2024-11-13 12:11:45,857|INFO|environment.py|  CFGModel(IMG_SIZE=640, WEIGHTS='weights/yolo_engine_pytorch.trt', NUM_CLASSES=10, DESIRED_LABELS=None, LABEL_THRES={'PERSON': 0.5, 'BICYCLE': 0.5, 'CAR': 0.5, 'MOTORBIKE': 0.5, 'AEROPLANE': 0.5, 'BUS': 0.5, 'TRAIN': 0.5, 'TRUCK': 0.5, 'BOAT': 0.5, 'TRAFFIC_LIGHT': 0.5}, DESIRED_CLASSES=None, CLS2LABEL=<enum 'LabelsCOCO'>, CLS_THRES={0: 0.5, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5}, IS_END2END=True)
+2024-11-13 12:11:45,857|INFO|environment.py|  CFGTracking()
+2024-11-13 12:11:45,857|INFO|environment.py|  None
+2024-11-13 12:11:45,857|INFO|environment.py|  None

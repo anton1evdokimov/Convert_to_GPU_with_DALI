@@ -1,0 +1,9 @@
+opencv-python-headless==4.8.0.76
+kafka-python==2.0.2
+filterpy==1.4.5
+#metrics
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+opentelemetry-exporter-otlp-proto-grpc==1.21.0
+#cpu
+openvino

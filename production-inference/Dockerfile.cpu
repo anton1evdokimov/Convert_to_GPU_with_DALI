@@ -1,0 +1,48 @@
+FROM python:3.9 AS builder
+
+# # RUN apt update && \
+# #     apt clean && rm -rf /var/lib/apt/lists/*
+
+RUN python -m pip install --upgrade pip && \
+    python -m pip install --no-cache-dir cython
+
+WORKDIR /workspace
+
+# Export files
+COPY src/inference/wghts_ncrptn.py /workspace/
+
+COPY export/setup.py /workspace/
+
+# Weights Encoding
+ARG WEIGHTS_NAME
+
+COPY weights/${WEIGHTS_NAME} /workspace/weights/ 
+
+RUN python wghts_ncrptn.py --weights /workspace/weights/ --dirname2save weights_encoded
+
+# Cythonizaton of a source code
+COPY src /workspace/src
+
+RUN python setup.py build_ext --inplace
+
+RUN rm -rf /workspace/build/src && \
+    rm -rf /workspace/build/temp*
+#=========================main-stage==============================
+
+# https://docs.nvidia.com/deeplearning/tensorrt/container-release-notes/index.html#rel-23-10
+FROM python:3.9
+
+COPY requirements-cpu.txt /requirements-cpu.txt
+
+RUN python -m pip install --upgrade pip && \ 
+    python -m pip install --no-cache-dir -r /requirements-cpu.txt
+
+WORKDIR /workspace
+
+COPY src/entrypoint.py /workspace/src/
+
+COPY --from=builder /workspace/weights_encoded/ /workspace/weights/ 
+
+COPY --from=builder /workspace/build /workspace/src
+
+ENTRYPOINT ["python", "src/entrypoint.py"]
